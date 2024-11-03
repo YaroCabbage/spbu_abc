@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:abc_sbpu_project/generated/l10n.dart';
 import 'package:abc_sbpu_project/providers/alphabet_provider.dart';
 import 'package:abc_sbpu_project/providers/letter_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class DetailScreen extends ConsumerWidget {
     if (letterData == null) {
       return const Center(child: CircularProgressIndicator());
     }
+    final l10n = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Letter ${letterData.letter}'),
+        title: Text(l10n.letterDetails(letterData.letter)),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -39,15 +41,17 @@ class DetailScreen extends ConsumerWidget {
                 fit: BoxFit.cover,
               ),
             const SizedBox(height: 16),
-            Text('Concept: ${letterData.concept}',
+            Text(l10n.conceptLabel(letterData.concept),
                 style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 8),
-            Text('Source: ${letterData.source}'),
+            Text(l10n.sourceLabel(letterData.source)),
             const SizedBox(height: 16),
-            Text('Definition:', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.definitionLabel,
+                style: Theme.of(context).textTheme.titleMedium),
             Text(letterData.definition),
             const SizedBox(height: 16),
-            Text('Usage:', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.usageLabel,
+                style: Theme.of(context).textTheme.titleMedium),
             Text(letterData.usage),
           ],
         ),

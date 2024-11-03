@@ -14,10 +14,14 @@ import '../screens/detail_screen.dart';
 @AutoRouterConfig()
 class AppRouter extends RootStackRouter {
   @override
+  RouteType get defaultRouteType => const RouteType.material();
+
+  @override
   List<AutoRoute> get routes => [
         AutoRoute(page: MainRoute.page, initial: true, path: '/'),
-        AutoRoute(
+        CustomRoute(
           page: DetailRoute.page,
+          // transitionsBuilder: TransitionsBuilders.zoomIn,
           path: '/:letter',
         ),
       ];
