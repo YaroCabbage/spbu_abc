@@ -14,4 +14,3 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           webRenderer: skwasm
-          baseHref: /spbu_abc/
