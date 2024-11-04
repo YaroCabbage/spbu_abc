@@ -1,5 +1,7 @@
 name: Gh-Pages
-
+permissions:
+  contents: write
+  
 on:
   push:
     branches: [ master ]
@@ -14,3 +16,4 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           webRenderer: skwasm
+          baseHref: /spbu_abc/
