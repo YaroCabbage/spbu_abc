@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:abc_sbpu_project/models/alphabet_entry.dart';
@@ -15,9 +16,9 @@ final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
     // Add more Excel files if needed
   ];
 
-  List<AlphabetEntry> allEntries = [];
-  final mapEntries = <String, AlphabetEntry>{};
+  final mapEntries = LinkedHashMap<String, AlphabetEntry>();
   final chosenL = List.generate(33, (_) => r.nextInt(assets.length));
+  final letters = <String, int>{};
   var assetIndex = 0;
 
   for (final asset in assets) {
@@ -84,8 +85,21 @@ final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
             imageData: imageData,
           );
 
-          mapEntries[letter] ??= newLetter;
           final index = row - 1;
+
+          if (letter.trim().isNotEmpty) {
+            letters[letter] = index;
+          }
+          if (letter.trim().isEmpty ||
+              concept.trim().isEmpty ||
+              source.trim().isEmpty ||
+              definition.trim().isEmpty ||
+              usage.trim().isEmpty ||
+              imageData == null) {
+            continue;
+          }
+
+          mapEntries[letter] ??= newLetter;
           final chosenIndex = chosenL[index];
           if (chosenIndex == assetIndex) {
             mapEntries[letter] = newLetter;
@@ -99,5 +113,9 @@ final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
     assetIndex++;
   }
 
-  return mapEntries.values.toList();
+  final allEntries = mapEntries.values.toList();
+  return letters.entries
+      .map((entry) =>
+          allEntries.firstWhere((alpha) => alpha.letter == entry.key))
+      .toList();
 });
