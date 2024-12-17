@@ -37,7 +37,8 @@ import '../models/alphabet_entry.dart';
 
 final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
   final assets = [
-    'assets/data/alphabet_iaro.xlsx',
+    // 'assets/data/alphabet_iaro.xlsx',
+    'assets/data/alphabet_ira.xlsx',
     // Add more Excel files if needed
   ];
 
