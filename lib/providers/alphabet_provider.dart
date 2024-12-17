@@ -92,7 +92,6 @@ final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
           }
           if (letter.trim().isEmpty ||
               concept.trim().isEmpty ||
-              source.trim().isEmpty ||
               definition.trim().isEmpty ||
               usage.trim().isEmpty ||
               imageData == null) {
