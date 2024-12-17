@@ -1,48 +1,24 @@
-import 'package:abc_sbpu_project/utils/image_excel_extractor.dart';
-import 'package:archive/archive.dart';
-import 'package:excel/excel.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'dart:math';
-import '../models/alphabet_entry.dart';
 
-// final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
-//   final assets = [
-//     'assets/data/alphabet1.json',
-//     'assets/data/alphabet2.json',
-//     // Add more asset paths as needed
-//   ];
-//
-//   List<AlphabetEntry> allEntries = [];
-//
-//   for (final asset in assets) {
-//     final jsonString = await rootBundle.loadString(asset);
-//     final List<dynamic> jsonList = json.decode(jsonString);
-//     final entries = jsonList.map((json) => AlphabetEntry.fromJson({
-//       'letter': json['Буква'],
-//       'concept': json['Понятие / словосочетание'],
-//       'source': json['Источник'],
-//       'definition': json['Определение своими словами'],
-//       'usage': json['Ситуации, в которой потребуется обращение к этому понятию'],
-//       'visualImage': json['Визуальный образ'],
-//     })).toList();
-//     allEntries.addAll(entries);
-//   }
-//
-//   // Randomly shuffle the entries
-//   allEntries.shuffle(Random());
-//   return allEntries;
-// });
+import 'package:abc_sbpu_project/models/alphabet_entry.dart';
+import 'package:excel/excel.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final r = Random();
 final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
   final assets = [
-    // 'assets/data/alphabet_iaro.xlsx',
+    'assets/data/alphabet_iaro.xlsx',
     'assets/data/alphabet_ira.xlsx',
+    'assets/data/alphabet_ksenia.xlsx',
+    'assets/data/alphabet_men.xlsx',
     // Add more Excel files if needed
   ];
 
   List<AlphabetEntry> allEntries = [];
+  final mapEntries = <String, AlphabetEntry>{};
+  final chosenL = List.generate(33, (_) => r.nextInt(assets.length));
+  var assetIndex = 0;
 
   for (final asset in assets) {
     final bytes = await rootBundle.load(asset);
@@ -99,23 +75,29 @@ final alphabetProvider = FutureProvider<List<AlphabetEntry>>((ref) async {
           final imageData =
               imageCell is ImageCellValue ? imageCell.value : null;
 
-          allEntries.add(AlphabetEntry(
+          final newLetter = AlphabetEntry(
             letter: letter,
             concept: concept,
             source: source,
             definition: definition,
             usage: usage,
             imageData: imageData,
-          ));
+          );
+
+          mapEntries[letter] ??= newLetter;
+          final index = row - 1;
+          final chosenIndex = chosenL[index];
+          if (chosenIndex == assetIndex) {
+            mapEntries[letter] = newLetter;
+          }
         } catch (e) {
           print('Error processing row $row: $e');
           continue;
         }
       }
     }
+    assetIndex++;
   }
 
-  // Randomly shuffle the entries
-  // allEntries.shuffle(Random());
-  return allEntries;
+  return mapEntries.values.toList();
 });

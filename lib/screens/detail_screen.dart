@@ -1,12 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:abc_sbpu_project/generated/l10n.dart';
-import 'package:abc_sbpu_project/providers/alphabet_provider.dart';
 import 'package:abc_sbpu_project/providers/letter_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:convert';
 
 @RoutePage()
 class DetailScreen extends ConsumerWidget {
@@ -34,11 +32,13 @@ class DetailScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (letterData.imageData != null)
-              Image.memory(
-                Uint8List.fromList(letterData.imageData!),
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              Center(
+                child: Image.memory(
+                  Uint8List.fromList(letterData.imageData!),
+                  height: 200,
+                  // width: double.infinity,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             const SizedBox(height: 16),
             Text(l10n.conceptLabel(letterData.concept),

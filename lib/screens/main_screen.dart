@@ -17,6 +17,7 @@ class MainScreen extends ConsumerWidget {
     final width = MediaQuery.sizeOf(context).longestSide;
 
     final body = Scaffold(
+      appBar:  AppBar(title: const Text('Азбука курса "Антропология детства"'),),
       body: alphabetAsync.when(
         data: (entries) {
           return GridView.builder(
